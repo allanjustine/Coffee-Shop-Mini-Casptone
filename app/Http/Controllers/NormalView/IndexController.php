@@ -14,7 +14,12 @@ class IndexController extends Controller
 {
     public function productList()
     {
-        $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', '=', auth()->user()->id)->get();
+        if (auth()->check()) {
+            $carts = Cart::where('user_id', '=', auth()->user()->id)->get();
+        } else {
+            $carts = collect();
+        }
+
         $allProducts = Product::orderBy('product_name', 'desc')->with('orders')->get();
         $numOrders = Order::where('user_id', auth()->id())->with('product')->get();
 

@@ -13,7 +13,11 @@ class PageController extends Controller
 
     public function contact()
     {
-        $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', '=', auth()->user()->id)->get();
+        if (auth()->check()) {
+            $carts = Cart::where('user_id', '=', auth()->user()->id)->get();
+        } else {
+            $carts = collect();
+        }
         $numOrders = Order::where('user_id', auth()->id())->with('product')->get();
         return view('normal-view.pages.contact', compact('carts', 'numOrders'));
     }
@@ -33,7 +37,11 @@ class PageController extends Controller
 
     public function about()
     {
-        $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', '=', auth()->user()->id)->get();
+        if (auth()->check()) {
+            $carts = Cart::where('user_id', '=', auth()->user()->id)->get();
+        } else {
+            $carts = collect();
+        }
         $numOrders = Order::where('user_id', auth()->id())->with('product')->get();
         return view('normal-view.pages.about', compact('carts', 'numOrders'));
     }

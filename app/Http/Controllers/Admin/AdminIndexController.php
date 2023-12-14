@@ -11,8 +11,8 @@ class AdminIndexController extends Controller
 {
     public function adminDashboard()
     {
-        $orders = Order::orderBy('created_at', 'desc')->paginate(5);
-        $logs = Log::orderBy('created_at', 'desc')->latest()->paginate(10);
+        $orders = Order::orderBy('id', 'desc')->paginate(5);
+        $logs = Log::orderBy('id', 'desc')->latest()->paginate(10);
         return view('admin.pages.dashboard', compact('logs', 'orders'));
     }
 }

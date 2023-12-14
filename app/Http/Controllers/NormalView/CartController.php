@@ -16,7 +16,10 @@ class CartController extends Controller
      */
     public function index()
     {
-        $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', '=', auth()->user()->id)->get();
+        if(auth()->check())
+        {
+            $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', '=', auth()->user()->id)->get();
+        }
         $numOrders = Order::where('user_id', auth()->id())->with('product')->get();
 
         return view('normal-view.carts.index', compact('carts', 'numOrders'));
