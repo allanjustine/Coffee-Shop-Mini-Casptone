@@ -77,3 +77,11 @@
         </div>
     </div>
 @endsection
+
+
+<script>
+    function previewImage() {
+        const previewImg = document.getElementById('previewImg');
+        previewImg.src = URL.createObjectURL(event.target.files[0]);
+    };
+</script>
