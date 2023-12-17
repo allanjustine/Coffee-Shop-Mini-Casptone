@@ -27,7 +27,7 @@
         <div class="row g-0">
             @forelse ($allProducts as $product)
                 <div class="col-md-4 col-lg-3 col-sm-6 mt-4 col-6">
-                    <div class="card">
+                    <div class="card rounded-0">
                         <img src="{{ Storage::url($product->product_image) }}" class="d-block" alt="..."
                             style="width: 100%; height: 200px;">
 

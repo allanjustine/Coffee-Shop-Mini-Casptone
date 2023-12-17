@@ -19,8 +19,12 @@
 </head>
 
 <body>
+    @if (session('not-authorized'))
+        <script>
+            window.alert('You are not authorized this page!');
+        </script>
+    @endif
     @yield('content')
-
 
     <script>
         function goBack() {
@@ -61,23 +65,30 @@
         height: 100vh;
         overflow-x: hidden;
     }
+
     .text-color {
         color: #412518;
     }
+
     .text-color2 {
         color: #894e32;
     }
+
     .text-color3 {
         color: #d09b71;
     }
+
     .page-link {
         background-color: #894e32 !important;
         color: white;
     }
+
     .page-link:hover {
         color: white;
     }
-    .active > .page-link, .page-link.active {
+
+    .active>.page-link,
+    .page-link.active {
         border: 1px solid #bb653c !important;
         background-color: #a97245 !important;
         color: white;
