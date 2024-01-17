@@ -35,11 +35,33 @@
             <div class="toast-header bg-success text-white">
                 {{-- <img src="..." class="rounded me-2" alt="..."> --}}
                 <strong class="me-auto">Success</strong>
-                <small>11 mins ago</small>
+                {{-- <small>11 mins ago</small> --}}
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
                 {{ session('message') }}
+                <div class="progress mt-3">
+                    <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%"
+                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (session('error'))
+        {{-- <div class="alert alert-success alert-dismissible fade show text-center mt-5" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div> --}}
+        <div class="toast position-fixed bg-danger text-white bottom-0 end-0 alert-success fade show" role="alert"
+            aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-white">
+                {{-- <img src="..." class="rounded me-2" alt="..."> --}}
+                <strong class="me-auto">Error</strong>
+                {{-- <small>11 mins ago</small> --}}
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {{ session('error') }}
                 <div class="progress mt-3">
                     <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%"
                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>

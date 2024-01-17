@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -16,8 +17,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        if(auth()->check())
-        {
+        if (auth()->check()) {
             $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', '=', auth()->user()->id)->get();
         }
         $numOrders = Order::where('user_id', auth()->id())->with('product')->get();
@@ -30,33 +30,38 @@ class CartController extends Controller
      */
     public function addToCart(Request $request)
     {
-        $userId = auth()->user()->id;
-        $productId = $request->product_id;
 
-        $existingCart = Cart::where('user_id', $userId)
-            ->where('product_id', $productId)
-            ->first();
-
-        if ($existingCart) {
-            $existingCart->update([
-                'cart_quantity' => $existingCart->cart_quantity + 1,
-            ]);
-
-            $log_entry = Auth::user()->fname . " added the quantity of product: " . $existingCart->product->product_name . " in cart " . " with the id# " . $existingCart->id;
-            event(new UserLog($log_entry));
-
-            return redirect('/carts')->with('message', 'Added to cart');
+        if (!Product::where('id', $request->product_id)->exists()) {
+            return back()->with('error', 'Sorry this product was deleted or not available, please select another one');
         } else {
-            $cart = Cart::create([
-                'product_id' => $productId,
-                'user_id' => $userId,
-                'cart_quantity' => 1,
-            ]);
+            $userId = auth()->user()->id;
+            $productId = $request->product_id;
 
-            $log_entry = Auth::user()->fname . " added a product: " . $cart->product->product_name . " to cart " . " with the id# " . $cart->id;
-            event(new UserLog($log_entry));
+            $existingCart = Cart::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->first();
 
-            return redirect('/carts')->with('message', 'Added to cart');
+            if ($existingCart) {
+                $existingCart->update([
+                    'cart_quantity' => $existingCart->cart_quantity + 1,
+                ]);
+
+                $log_entry = Auth::user()->fname . " added the quantity of product: " . $existingCart->product->product_name . " in cart " . " with the id# " . $existingCart->id;
+                event(new UserLog($log_entry));
+
+                return redirect('/carts')->with('message', 'Added to cart');
+            } else {
+                $cart = Cart::create([
+                    'product_id' => $productId,
+                    'user_id' => $userId,
+                    'cart_quantity' => 1,
+                ]);
+
+                $log_entry = Auth::user()->fname . " added a product: " . $cart->product->product_name . " to cart " . " with the id# " . $cart->id;
+                event(new UserLog($log_entry));
+
+                return redirect('/carts')->with('message', 'Added to cart');
+            }
         }
     }
 
@@ -87,16 +92,21 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cart $cart)
+    public function update(Request $request, $id)
     {
+        $cart = Cart::find($id);
 
         $request->validate([
             'cart_quantity'         =>          ['required', 'numeric', 'min:1']
         ]);
 
-        $cart->update([
-            'cart_quantity'         =>          $request->cart_quantity
-        ]);
+        if (!$cart) {
+            return back()->with('error', 'The cart item you selected not found');
+        } else {
+            $cart->update([
+                'cart_quantity'         =>          $request->cart_quantity
+            ]);
+        }
 
         $log_entry = Auth::user()->fname . " update a quantity of product: " . $cart->product->product_name . " from cart " . " with the id# " . $cart->id;
         event(new UserLog($log_entry));
@@ -107,9 +117,15 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cart $cart)
+    public function destroy($id)
     {
-        $cart->delete();
+        $cart = Cart::find($id);
+
+        if (!$cart) {
+            return back()->with('error', 'No cart item to delete');
+        } else {
+            $cart->delete();
+        }
 
         $log_entry = Auth::user()->fname . " Deleted product: " . $cart->product->product_name . " from cart " . " with the id# " . $cart->id;
         event(new UserLog($log_entry));
