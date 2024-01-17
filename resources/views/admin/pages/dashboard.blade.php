@@ -60,6 +60,9 @@
         <div class="row">
             <div class="col-md-7 mb-5">
                 <h4 class="text-color"><strong><i class="far fa-history"></i> Activity Logs</strong></h4>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <a href="/admin/logs" class="btn float-end text-white my-2" style="background: #453608dd;">Load more</a>
                 <table class="table table-warning shadow">
                     <thead>
                         <tr>
@@ -85,11 +88,14 @@
                 <div>
                     {{ $logs->links('pagination::bootstrap-5') }}
                 </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-5">
                 <h4 class="text-color"><strong><i class="far fa-history"></i> Recent orders</strong></h4>
                 <div class="card shadow">
                     <div class="card-body p-0">
+                        <a href="/admin/orders" class="btn float-end text-white my-2" style="background: #453608dd;">Load more</a>
                         <div class="table-responsive">
                             <table class="table table-warning">
                                 <thead>

@@ -24,6 +24,29 @@
             window.alert('You are not authorized this page!');
         </script>
     @endif
+
+    @if (session('message'))
+        {{-- <div class="alert alert-success alert-dismissible fade show text-center mt-5" role="alert">
+        {{ session('message') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div> --}}
+        <div class="toast position-fixed bg-success text-white bottom-0 end-0 alert-success fade show" role="alert"
+            aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                {{-- <img src="..." class="rounded me-2" alt="..."> --}}
+                <strong class="me-auto">Success</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {{ session('message') }}
+                <div class="progress mt-3">
+                    <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%"
+                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+    @endif
     @yield('content')
 
     <script>
@@ -55,6 +78,25 @@
 </body>
 
 </html>
+
+<script>
+    // Automatically remove the toast after 3 seconds
+    var toast = new bootstrap.Toast(document.querySelector('.toast'));
+    setTimeout(function() {
+        toast.hide();
+    }, 2000);
+
+    // Update progress bar dynamically
+    var progressBar = document.getElementById('progressBar');
+    var width = 100; // Set initial width to 100%
+    var interval = setInterval(function() {
+        width -= 1; // Decrease the width by 1% every 100 milliseconds
+        progressBar.style.width = width + '%';
+        if (width <= 0) {
+            clearInterval(interval);
+        }
+    }, 1);
+</script>
 
 <style>
     html {

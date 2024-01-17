@@ -38,14 +38,18 @@
                         </div>
 
                         <div class="text-center">
-                            <p><span class="text-color2" style="font-size: 12px;">From</span> <span class="text-color"><strong>&#8369;{{ number_format($product->price, 2) }}</strong></span></p>
+                            <p><span class="text-color2" style="font-size: 12px;">From</span> <span
+                                    class="text-color"><strong>&#8369;{{ number_format($product->price, 2) }}</strong></span>
+                            </p>
 
                             <div class="d-flex justify-content-center">
                                 <form action="{{ route('carts') }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <input type="text" hidden value="{{ $product->id }}" name="product_id">
-                                    <button type="submit" class="btn rounded-0 text-white" style="background: #5b3523;">Add to cart</button>
+                                    <button type="submit" class="btn rounded-0 text-white" style="background: #5b3523;"
+                                        onclick="addToCart({{ $product->id }})"><span id="spinner{{ $product->id }}"
+                                            class="spinner-border spinner-border-sm d-none"></span> Add to cart</button>
                                 </form>
 
                             </div>
@@ -70,3 +74,19 @@
         border-image: fill 0 linear-gradient(#beada23f, #beada233);
     }
 </style>
+
+<script>
+    function addToCart(productId) {
+        var spinner = document.getElementById('spinner' + productId);
+
+        // Show spinner
+        spinner.classList.remove('d-none');
+        cartIcon.classList.add('d-none');
+        setTimeout(function() {
+            spinner.classList.add('d-none');
+            cartIcon.classList.remove('d-none');
+
+
+        }, 2000);
+    }
+</script>

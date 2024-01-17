@@ -117,7 +117,7 @@ class AuthIndexController extends Controller
     public function logout()
     {
         auth()->logout();
-        return redirect('/login')->with('message', 'Log out successfully');
+        return redirect('/login')->with('messageLogout', 'Log out successfully');
     }
 
     public function verification(User $user, $token)

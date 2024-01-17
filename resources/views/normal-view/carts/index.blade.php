@@ -6,12 +6,6 @@
 
 @section('content')
     <div class="container py-5">
-        @if (session('message'))
-            <div class="alert alert-success alert-dismissible fade show text-center mt-5" role="alert">
-                {{ session('message') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
         <div class="row d-flex justify-content-center my-4">
             <div class="col-md-8">
                 <h2 class="text-color mb-4"><strong>Shopping cart</strong></h2>

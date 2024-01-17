@@ -12,9 +12,9 @@
                     <div class="col-12">
                         <div class="mb-5">
                             <h3 class="text-color"><strong>Sign In Coffee Lovers</strong></h3>
-                            @if (session('message'))
+                            @if (session('messageLogout'))
                                 <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                                    {{ session('message') }}
+                                    {{ session('messageLogout') }}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"
                                         aria-label="Close"></button>
                                 </div>

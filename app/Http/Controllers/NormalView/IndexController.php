@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -83,7 +84,6 @@ class IndexController extends Controller
     public function cancelled(Order $order)
     {
         $product = $order->product;
-        $product->increment('stock', $order->order_quantity);
         $product->decrement('sold', $order->order_quantity);
 
         $order->delete();
