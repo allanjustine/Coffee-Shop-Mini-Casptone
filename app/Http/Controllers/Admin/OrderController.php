@@ -19,36 +19,44 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('users'));
     }
 
-    public function manageOrders(Request $request, Order $order)
+    public function manageOrders(Request $request, $id)
     {
-        $statusUpdated = $request->status;
+        // $statusUpdated = $request->status;
 
-        // Validate the provided status against expected values
-        $validStatuses = ['Pending', 'Preparing', 'Ongoing delivery', 'Delivered'];
-        if (!in_array($statusUpdated, $validStatuses)) {
-            return back()->with('error', 'Invalid status provided');
-        }
+        // // Validate the provided status against expected values
+        // $validStatuses = ['Pending', 'Preparing', 'Ongoing delivery', 'Delivered'];
+        // if (!in_array($statusUpdated, $validStatuses)) {
+        //     return back()->with('error', 'Invalid status provided');
+        // }
 
-        // Check the current status and update accordingly
-        if ($statusUpdated == "Pending") {
-            $statusUpdated = "Preparing";
-        } elseif ($statusUpdated == "Preparing") {
-            $statusUpdated = "Ongoing delivery";
-        } elseif ($statusUpdated == "Ongoing delivery") {
-            $statusUpdated = "Delivered";
-        } elseif ($statusUpdated == "Delivered") {
-            $statusUpdated = "Paid";
-        }
+        // // Check the current status and update accordingly
+        // if ($statusUpdated == "Pending") {
+        //     $statusUpdated = "Preparing";
+        // } elseif ($statusUpdated == "Preparing") {
+        //     $statusUpdated = "Ongoing delivery";
+        // } elseif ($statusUpdated == "Ongoing delivery") {
+        //     $statusUpdated = "Delivered";
+        // } elseif ($statusUpdated == "Delivered") {
+        //     $statusUpdated = "Paid";
+        // }
 
-        // Update the order status
+        $order = Order::find($id);
+
+        if(!$order) {
+            return back()->with('error', 'No order available');
+        } else {
+            // Update the order status
         $order->update([
-            'status' => $statusUpdated,
+            'status'        =>      $request->status,
         ]);
+        }
 
-        $log_entry = Auth::user()->lname . " marked as " . $statusUpdated . " for " .  $order->user->fname . "'s order. " . " with the id# " . $order->id;
+
+
+        $log_entry = Auth::user()->lname . " marked as " . $order->status . " for " .  $order->user->fname . "'s order. " . " with the id# " . $order->id;
         event(new UserLog($log_entry));
 
-        return back()->with('message', 'Successfully marked as ' . $statusUpdated);
+        return back()->with('message', 'Successfully marked as ' . $order->status);
     }
 
 
