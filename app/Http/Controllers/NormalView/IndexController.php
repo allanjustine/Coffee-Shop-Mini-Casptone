@@ -98,7 +98,7 @@ class IndexController extends Controller
     public function searchProduct(Request $request)
     {
         $search = $request->search;
-        $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', '=', auth()->user()->id)->get();
+        $carts = Cart::with('product')->orderBy('created_at', 'desc')->where('user_id', auth()->user()->id ?? '')->get();
         $numOrders = Order::where('user_id', auth()->id())->with('product')->get();
 
         $products = Product::where('product_name', 'like', "%$search%")
